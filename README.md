@@ -20,14 +20,14 @@ Minden adat a böngészőben marad: nincs fiók, nincs szerver, nincs hálózati
 
 ## Futtatás
 
-Node 20+ és npm (vagy Bun):
+Bun (vagy Node 20+):
 
 ```bash
-npm ci
-npm run dev        # http://localhost:5188
-npm run build      # dist/
-npm run preview
-npm test
+bun install
+bun dev            # http://localhost:3000
+bun run build      # dist/
+bun run preview
+bun test
 ```
 
 ## Adatok és fordítás
@@ -40,10 +40,10 @@ npm test
 - `scripts/translate-senses.mjs`, `scripts/translate-senses-extra.mjs`, `scripts/translate-extras.mjs`, `scripts/translate-examples.mjs` – újraindítható fordító pipeline (DeepSeek).
 
 ```bash
-DEEPSEEK_API_KEY=... node scripts/translate-senses.mjs --concurrency 4
-DEEPSEEK_API_KEY=... node scripts/translate-extras.mjs --concurrency 4
-DEEPSEEK_API_KEY=... node scripts/translate-examples.mjs --concurrency 4
-npm run dataset
+DEEPSEEK_API_KEY=... bun scripts/translate-senses.mjs --concurrency 4
+DEEPSEEK_API_KEY=... bun scripts/translate-extras.mjs --concurrency 4
+DEEPSEEK_API_KEY=... bun scripts/translate-examples.mjs --concurrency 4
+bun run dataset
 ```
 
 A magyar jelentések, tippek és példamondatok gépi fordítással készültek, és még nem estek át teljes szakmai lektoráláson.
@@ -106,7 +106,7 @@ A `.gitignore` már kizárja ezeket a mappákat, így nem kerülnek vissza a kö
 
 ### 3. Vercel
 
-Add New → Project → Import Git Repository; Framework: Vite, Build: `npm run build`,
+Add New → Project → Import Git Repository; Framework: Vite, Build: `bun run build`,
 Output: `dist`. Environment Variables:
 
 ```
