@@ -29,3 +29,20 @@ test("rejects other versions and unknown settings", () => {
   assert.equal(s.theme, "dark");
   assert.equal(s.retention, 0.9);
 });
+
+test("keeps valid reading results and drops malformed ones", () => {
+  const p = sanitizeProgress(
+    {
+      version: 2,
+      readings: {
+        r0001: { readAt: 1, correct: 2, total: 3 },
+        r0002: { readAt: 1, correct: 4, total: 3 },
+        nope: { readAt: 1, correct: 1, total: 3 },
+        r0003: "x",
+      },
+    },
+    "szoatlasz-open",
+  );
+  assert.deepEqual(Object.keys(p.readings), ["r0001"]);
+  assert.equal(p.readings.r0001.correct, 2);
+});

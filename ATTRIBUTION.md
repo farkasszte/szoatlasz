@@ -14,6 +14,7 @@ adatkészletére és kódjára épülő magyar adaptáció.
 - a teljes alkalmazáskázt (MIT): nézetek, FSRS ütemezés, WebGL csillagtérkép, hangok, PWA;
 - mind a **7 298 angol szócikket**: angol meghatározások, két példamondat, szókapcsolatok,
   szócsaládok, szinonimák, ellentétek, CEFR-szint és téma;
+- a **732 olvasmányt** (angol szöveg, IELTS-stílusú Igaz/Hamis/Nincs megadva kérdések) és a hozzájuk tartozó szóhivatkozásokat;
 - a hozzájuk tartozó **7 298 illusztrációt** (512 px és 256 px WebP), a **22 905 hangfelvételt**
   (brit/amerikai szóhang, példamondat-hang) és a 24 felületi hangeffektet, valamint a hangulatokat.
 
@@ -24,7 +25,7 @@ adatkészletére és kódjára épülő magyar adaptáció.
   a 986 leggyakoribb iskolai szó esetében a Kincsesláda saját szókészletéből);
 - a használati tippek és a szókapcsolatok jelentése magyarul olvasható;
 - a kínai nyelvű mezők nem jelennek meg a felületen és a webes adatban;
-- a 14 596 példamondat magyar fordítása is elkészült (gépi fordítás, lektorálás előtt);
+- a 14 596 példamondat és a 732 olvasmány magyar fordítása, valamint a kérdések magyar magyarázata is elkészült (gépi fordítás, lektorálás előtt);
 - a márka- és felületi szövegek, a Névjegy oldal és a dokumentáció ehhez a projekthez készültek.
 
 A módosítások nem sugallják azt, hogy az eredeti szerzők jóváhagyták ezt a változatot.

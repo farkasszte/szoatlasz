@@ -2,6 +2,7 @@
 const VERSION = "szoatlasz-v5";
 const SHELL = `${VERSION}-shell`;
 const MEDIA = `${VERSION}-media`;
+const READING = `${VERSION}-readings`;
 
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (event) => {
@@ -50,8 +51,8 @@ self.addEventListener("fetch", (event) => {
         fetch(req).then((res) => {
           if (res.ok && (res.type === "basic" || res.type === "cors")) {
             const copy = res.clone();
-            const name = isR2Media || /\/atlas\/(img|thumb|audio)\//.test(url.pathname) ? MEDIA : SHELL;
-            caches.open(name).then((c) => c.put(req, copy)).then(() => name === MEDIA && trim(MEDIA, 2500));
+            const name = /\/atlas\/(img|thumb|audio)\//.test(url.pathname) ? MEDIA : /\/atlas\/readings\//.test(url.pathname) ? READING : SHELL;
+            caches.open(name).then((c) => c.put(req, copy)).then(() => name === MEDIA && trim(MEDIA, 1500));
           }
           return res;
         }),

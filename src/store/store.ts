@@ -34,6 +34,12 @@ export interface TypingRound {
   accuracy: number;
 }
 
+export interface ReadingResult {
+  readAt: number;
+  correct: number;
+  total: number;
+}
+
 export interface Progress {
   version: 2;
   datasetId: string;
@@ -44,6 +50,8 @@ export interface Progress {
   session: ActiveSession | null;
   /** Rolling list of recent mistakes, newest first. */
   mistakes: string[];
+  /** Olvasósarok: fejezetenként az utolsó eredmény. */
+  readings: Record<string, ReadingResult>;
 }
 
 export interface Settings {
@@ -91,6 +99,7 @@ export const emptyProgress = (datasetId: string): Progress => ({
   typing: [],
   session: null,
   mistakes: [],
+  readings: {},
 });
 
 export const dayKey = (d = new Date()) =>
@@ -155,6 +164,10 @@ export function sanitizeProgress(v: unknown, datasetId: string): Progress {
           isObj(t) && num(t.at, 0) && ["word", "sentence", "dictation"].includes(t.mode as string) && num(t.items, 0) && num(t.wpm, 0, 400) && num(t.accuracy, 0, 100),
       )
       .slice(-500);
+  if (isObj(v.readings))
+    for (const [k, r] of Object.entries(v.readings))
+      if (/^r\d{4}$/.test(k) && isObj(r) && num(r.readAt, 0) && num(r.correct, 0) && num(r.total, 0, 10) && (r.correct as number) <= (r.total as number))
+        out.readings[k] = { readAt: r.readAt as number, correct: r.correct as number, total: r.total as number };
   const s = v.session;
   if (isObj(s) && typeof s.id === "string" && Array.isArray(s.steps) && num(s.index, 0) && isObj(s.graded))
     out.session = s as unknown as ActiveSession;
@@ -280,6 +293,13 @@ export function bumpDay(p: Progress, patch: Partial<DayStat>): Progress {
       [k]: { n: d.n + (patch.n ?? 0), r: d.r + (patch.r ?? 0), c: d.c + (patch.c ?? 0), t: d.t + (patch.t ?? 0) },
     },
   };
+}
+
+export function saveReadingResult(id: string, correct: number, total: number) {
+  store.progress((p) => ({
+    ...p,
+    readings: { ...p.readings, [id]: { readAt: Date.now(), correct, total } },
+  }));
 }
 
 export function toggleBookmark(id: string) {

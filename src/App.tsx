@@ -1,4 +1,4 @@
-import { BookOpen, ChevronLeft, ChevronRight, Compass, Github, Keyboard, Moon, Search, Sun, User } from "lucide-react";
+import { BookOpen, BookOpenCheck, ChevronLeft, ChevronRight, Compass, Github, Keyboard, Moon, Search, Sun, User } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { AtlasContext, useAtlas, useEntry } from "./atlas/context";
 import { loadOpenAtlas } from "./atlas/data";
@@ -11,6 +11,7 @@ import { Learn } from "./pages/Learn";
 import { Me } from "./pages/Me";
 import { Onboarding } from "./pages/Onboarding";
 import { Practice } from "./pages/Practice";
+import { ReadingPage } from "./pages/Reading";
 import { Today } from "./pages/Today";
 import { cue } from "./lib/sound";
 import { store, useStore } from "./store/store";
@@ -25,6 +26,7 @@ import { Toasts } from "./ui/Toast";
 const NAV: { page: Route["page"]; label: string; icon: typeof Compass }[] = [
   { page: "today", label: "Ma", icon: Compass },
   { page: "atlas", label: "Atlasz", icon: BookOpen },
+  { page: "reading", label: "Olvasás", icon: BookOpenCheck },
   { page: "practice", label: "Gépelés", icon: Keyboard },
   { page: "me", label: "Haladás", icon: User },
 ];
@@ -150,6 +152,7 @@ function Shell() {
       <main className="main" id="main">
         {route.page === "today" && <Today />}
         {route.page === "atlas" && <AtlasPage route={route} />}
+        {route.page === "reading" && <ReadingPage id={route.id} />}
         {route.page === "learn" && <Learn />}
         {route.page === "practice" && <Practice />}
         {route.page === "me" && <Me />}

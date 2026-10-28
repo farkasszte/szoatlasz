@@ -67,3 +67,25 @@ export interface Atlas {
   img: (ref: WordRef | Entry, size?: "thumb" | "full") => string | null;
   audio: (ref: WordRef | Entry, kind: "uk" | "us" | "ex" | "ex2") => string | null;
 }
+
+/** Olvasósarok – katalógus-elem. */
+export interface ReadingMeta {
+  id: string;
+  ids: string[];
+  title: string;
+  titleHu: string;
+  topic: string;
+  cefr: number;
+}
+
+export interface ReadingQuestion {
+  s: string;
+  a: "T" | "F" | "NG";
+  why: string;
+}
+
+export interface ReadingDoc extends ReadingMeta {
+  paras: string[];
+  hu: string[];
+  q: ReadingQuestion[];
+}

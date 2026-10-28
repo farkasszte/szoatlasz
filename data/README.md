@@ -18,3 +18,15 @@ npm run dataset
 
 A magyar jelentések, tippek és példamondatok gépi fordítással készültek a kínai forrásjelentésekből; a 986 leggyakoribb
 iskolai szó jelentése a Kincsesláda saját szókészletéből származik. Lektorálás előtt állnak.
+
+## Olvasósarok
+
+- `readings/index.raw.json` – a 732 fejezet katalógusa az eredeti forrásból.
+- `readings/raw/*.json` – a fejezetek angol szövege és kérdései (CC BY 4.0).
+- `readings/hu.json` – a címek, bekezdések és kérdés-magyarázatok magyar fordítása.
+
+```bash
+npm run readings:fetch
+npm run readings:translate
+npm run readings
+```

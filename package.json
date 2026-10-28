@@ -9,6 +9,9 @@
     "preview": "vite preview --host 0.0.0.0",
     "test": "node --import tsx --test src/**/*.test.ts",
     "dataset": "node scripts/build-dataset.mjs",
+    "readings:fetch": "node scripts/fetch-readings.mjs",
+    "readings:translate": "node scripts/translate-readings.mjs",
+    "readings": "node scripts/build-readings.mjs",
     "format": "prettier --write src vite.config.ts scripts/*.mjs package.json tsconfig.json"
   },
   "dependencies": {

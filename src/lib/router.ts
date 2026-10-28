@@ -5,6 +5,7 @@ export type Route =
   | { page: "today" }
   | { page: "atlas"; topic?: string; level?: string; q?: string; view?: string }
   | { page: "learn" }
+  | { page: "reading"; id?: string }
   | { page: "practice" }
   | { page: "me" }
   | { page: "about" };
@@ -24,6 +25,7 @@ function parse(hash: string): Location {
   if (seg[0] === "atlas")
     route = { page: "atlas", topic: params.get("topic") || undefined, level: params.get("level") || undefined, q: params.get("q") || undefined, view: params.get("view") || undefined };
   else if (seg[0] === "learn") route = { page: "learn" };
+  else if (seg[0] === "reading") route = { page: "reading", id: params.get("id") || undefined };
   else if (seg[0] === "practice") route = { page: "practice" };
   else if (seg[0] === "me") route = { page: "me" };
   else if (seg[0] === "about") route = { page: "about" };
@@ -33,6 +35,7 @@ function parse(hash: string): Location {
 
 export function href(route: Route, word?: string | null) {
   const params = new URLSearchParams();
+  if (route.page === "reading" && route.id) params.set("id", route.id);
   if (route.page === "atlas") {
     if (route.topic) params.set("topic", route.topic);
     if (route.level) params.set("level", route.level);

@@ -1,6 +1,8 @@
 import { ArrowRight, Flame, Keyboard, Sparkles } from "lucide-react";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { prefetch, useAtlas, useEntry } from "../atlas/context";
+import { loadReadingIndex } from "../atlas/readings";
+import type { ReadingMeta } from "../atlas/types";
 import { go, openWord } from "../lib/router";
 import { cue } from "../lib/sound";
 import { hashSeed } from "../lib/text";
@@ -160,6 +162,8 @@ export function Today() {
         </div>
       </section>
 
+      <ReadingOfDay />
+
       <div className="today-grid">
         <WordOfDay />
 
@@ -205,6 +209,77 @@ export function Today() {
         <Topics />
       </div>
     </div>
+  );
+}
+
+function ReadingOfDay() {
+  const atlas = useAtlas();
+  const readings = useStore((s) => s.progress.readings) ?? {};
+  const startLevel = useStore((s) => s.settings.startLevel);
+  const [items, setItems] = useState<ReadingMeta[] | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    loadReadingIndex().then(
+      (list) => alive && setItems(list),
+      () => undefined,
+    );
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const pick = useMemo(() => {
+    if (!items?.length) return null;
+    const unread = items.filter((i) => !readings[i.id]);
+    const fit = unread.filter((i) => i.cefr <= startLevel + 1);
+    const pool = fit.length ? fit : unread.length ? unread : items;
+    return pool[hashSeed(dayKey()) % pool.length];
+  }, [items, readings, startLevel]);
+
+  if (!pick) return null;
+  const level = atlas.cefr[pick.cefr] ?? "A1";
+  const topic = atlas.topics.find(([key]) => key === pick.topic)?.[1] ?? pick.topic;
+  const thumbs = pick.ids
+    .map((id) => atlas.byId.get(id))
+    .filter((w): w is NonNullable<typeof w> => !!w)
+    .slice(0, 3);
+
+  const open = () => go({ page: "reading", id: pick.id });
+
+  return (
+    <section
+      className="reading-of-day"
+      onClick={open}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          open();
+        }
+      }}
+      role="link"
+      tabIndex={0}
+      aria-label={`Mai olvasmány: ${pick.titleHu}`}
+    >
+      <div className="reading-of-day-art" aria-hidden="true">
+        {thumbs.map((w) => (
+          <Illustration key={w.id} src={atlas.img(w, "thumb")} word={w.word} topic={w.topic} eager />
+        ))}
+      </div>
+      <div className="reading-of-day-body">
+        <p className="eyebrow">Mai olvasmány · {level}</p>
+        <h2>{pick.titleHu}</h2>
+        <p className="reading-of-day-en" lang="en">
+          {pick.title}
+        </p>
+        <p className="reading-of-day-meta">
+          {topic} · {pick.ids.length} szó · körülbelül 3 perc
+        </p>
+      </div>
+      <span className="btn btn-glass">
+        Olvasás <ArrowRight size={17} />
+      </span>
+    </section>
   );
 }
 
