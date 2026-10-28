@@ -29,6 +29,7 @@ pnpm-debug.log*
 
 # Teszt és riport kimenetek
 .playwright-cli/
+.playwright-mcp/
 test-results/
 playwright-report/
 blob-report/

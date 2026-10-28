@@ -113,7 +113,7 @@ export function About() {
           <h3 className="eyebrow">Fejlesztőknek</h3>
           <p className="muted">
             A <code>data/word-atlas.json</code> a teljes, szerkeszthető szótár; a <code>public/atlas</code> mappa a webes
-            darabolt adatot, az illusztrációkat és a hangokat tartalmazza. A magyar fordítások a <code>data/hu</code>
+            darabolt adatot, az illusztrációkat és a hangokat tartalmazza, de csak az eredeti projectben elérhető. A magyar fordítások a <code>data/hu</code>
             mappában, szócikkenként csoportosítva élnek.
           </p>
           <a className="link" href={`${REPO_URL}#readme`} target="_blank" rel="noreferrer">

@@ -30,7 +30,7 @@ export function Onboarding() {
           <h1 className="display">
             {atlas.count.toLocaleString()} csillag
             <br />
-            vár rád, hogy felfényljen.
+            vár rád, hogy világítson.
           </h1>
           <fieldset>
             <legend>Honnan indulsz?</legend>

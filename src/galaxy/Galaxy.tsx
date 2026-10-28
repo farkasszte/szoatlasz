@@ -279,7 +279,7 @@ export function Galaxy({
         }}
         onWheel={onWheel}
         role="img"
-        aria-label={`Szókincs-csillagtérkép: ${layout.n} csillag, ebből ${lit} felfénylve. Húzd a forgatáshoz, görgess a nagyításhoz, kattints egy csillagra a szócikkhez.`}
+        aria-label={`Szókincs-csillagtérkép: ${layout.n} csillag, ebből ${lit} világít. Húzd a forgatáshoz, görgess a nagyításhoz, kattints egy csillagra a szócikkhez.`}
         tabIndex={0}
         onKeyDown={(e) => {
           const eng = engine.current;
@@ -360,7 +360,7 @@ export function Galaxy({
               if (store.get().settings.sfx) void cue("fly");
             }
           }}
-          aria-label="Repülés egy felfénylő csillaghoz"
+          aria-label="Repülés egy fénylő csillaghoz"
         >
           <Crosshair size={17} />
         </button>

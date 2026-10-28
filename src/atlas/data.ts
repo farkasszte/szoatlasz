@@ -2,7 +2,8 @@ import type { Atlas, Entry, IndexRow, WordRef } from "./types";
 import { MEDIA } from "./types";
 
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
-const EXTERNAL = String(import.meta.env.VITE_MEDIA_BASE ?? "").replace(/\/$/, "");
+const DEFAULT_MEDIA_BASE = "https://pub-d41b94eda1234be9a37f362422025457.r2.dev";
+const EXTERNAL = String(import.meta.env.VITE_MEDIA_BASE || DEFAULT_MEDIA_BASE).replace(/\/$/, "");
 const url = (p: string) => `${BASE}/atlas/${p}`;
 const media = (p: string) => (EXTERNAL ? `${EXTERNAL}/atlas/${p}` : url(p));
 

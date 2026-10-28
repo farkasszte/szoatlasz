@@ -8,11 +8,10 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const base = String(process.env.VITE_MEDIA_BASE ?? "").trim();
-if (!base) {
-  console.log("VITE_MEDIA_BASE nincs beállítva – a média a buildben marad.");
-  process.exit(0);
-}
+const base = String(
+  process.env.VITE_MEDIA_BASE ||
+  "https://pub-d41b94eda1234be9a37f362422025457.r2.dev"
+).trim();
 
 const dist = path.resolve(import.meta.dirname, "..", "dist", "atlas");
 let removed = 0;

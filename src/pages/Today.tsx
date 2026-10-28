@@ -115,7 +115,7 @@ export function Today() {
           ) : (
             <>
               <p className="eyebrow eyebrow-light">Mára kész</p>
-              <h2>Ma minden csillag felfénylett.</h2>
+              <h2>Ma minden csillag megjelent.</h2>
               <p className="journey-lede">A memóriának kell egy kis szünet. Ha többet szeretnél, folytathatod.</p>
             </>
           )}
@@ -216,9 +216,9 @@ function GalaxyPanel({ learned, total }: { learned: number; total: number }) {
       <div className="galaxy-panel-copy">
         <p className="eyebrow eyebrow-light">A szókincsed csillagtérképe</p>
         <h3>
-          <b>{learned.toLocaleString()}</b> csillag felfénylett
+          <b>{learned.toLocaleString()}</b> csillag világít
         </h3>
-        <p>{learned ? `Még ${(total - learned).toLocaleString()} vár rád. Az arany a ma felfénylő csillag.` : `${total.toLocaleString()} szó, ${total.toLocaleString()} csillag. Minden megtanult szó felfénylik.`}</p>
+        <p>{learned ? `Még ${(total - learned).toLocaleString()} vár rád. Az arany a ma megjelenő csillag.` : `${total.toLocaleString()} szó, ${total.toLocaleString()} csillag. Minden megtanult szó világít.`}</p>
         <span className="btn btn-glass">
           Csillagtérkép megnyitása <ArrowRight size={18} />
         </span>

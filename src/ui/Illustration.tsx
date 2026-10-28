@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const HUES = ["#C4573A", "#7F9B77", "#D9A03A", "#5F7FA3", "#A86B8C", "#4E7C76"];
 
@@ -19,12 +19,22 @@ export function Illustration({
   alt?: string;
 }) {
   const [state, setState] = useState<"loading" | "ok" | "error">("loading");
-  const showImg = src && state !== "error";
+
+  useEffect(() => {
+    setState("loading");
+  }, [src]);
+
+  const showImg = Boolean(src && state !== "error");
   return (
     <figure className={`illo ${showImg && state === "ok" ? "is-loaded" : ""} ${className}`}>
       {showImg ? (
         <img
-          src={src}
+          ref={(node) => {
+            if (node?.complete && node.naturalWidth > 0 && state !== "ok") {
+              setState("ok");
+            }
+          }}
+          src={src!}
           alt={alt ?? ""}
           loading={eager ? "eager" : "lazy"}
           decoding="async"
