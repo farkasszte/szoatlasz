@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 
 /** Accessible dialog: centered panel on desktop, bottom sheet on phones. */
 export function Sheet({
@@ -50,7 +51,7 @@ export function Sheet({
     };
   }, [open, onClose]);
   if (!open) return null;
-  return (
+  const content = (
     <div className="sheet-root" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
       <div ref={panel} className={`sheet ${wide ? "sheet-wide" : ""} ${className}`} role="dialog" aria-modal="true" aria-label={label} tabIndex={-1}>
         <span className="sheet-grip" aria-hidden="true" />
@@ -61,4 +62,5 @@ export function Sheet({
       </div>
     </div>
   );
+  return typeof document !== "undefined" ? createPortal(content, document.body) : content;
 }

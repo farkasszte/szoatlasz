@@ -160,8 +160,8 @@ export interface EngineOptions {
 /** Choose a quality tier before the first frame. */
 export function detectQuality(): "high" | "low" {
   const nav = navigator as Navigator & { deviceMemory?: number };
-  const small = Math.min(screen.width, screen.height) < 600;
-  if ((nav.hardwareConcurrency ?? 8) <= 4 || (nav.deviceMemory ?? 8) <= 4 || small) return "low";
+  const small = Math.min(screen.width, screen.height) < 480;
+  if ((nav.hardwareConcurrency ?? 8) < 4 || (nav.deviceMemory ?? 8) < 3 || small) return "low";
   return "high";
 }
 

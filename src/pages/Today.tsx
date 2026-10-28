@@ -11,14 +11,15 @@ import { Galaxy } from "../galaxy/Galaxy";
 import { Highlight, Pronounce } from "../ui/EntryView";
 import { Illustration } from "../ui/Illustration";
 import { Ring } from "../ui/Ring";
+import { ExamBanner } from "../ui/Exam";
 
 const BRAND = `${import.meta.env.BASE_URL}brand`;
 
 function greeting(h: number) {
-  if (h < 5) return "Még az éjszaka";
+  if (h < 5) return "Még éjszaka van";
   if (h < 11) return "Jó reggelt";
   if (h < 14) return "Jó napot";
-  if (h < 18) return "Jó délutánt";
+  if (h < 18) return "Jó napot";
   return "Jó estét";
 }
 
@@ -73,6 +74,7 @@ export function Today() {
   const learned = Object.keys(progress.cards).length;
   const mastered = masteredCount(progress);
   const teaser = (active ? active.newIds : plan.fresh).slice(0, 5).map((id) => atlas.byId.get(id)!).filter(Boolean);
+  const isNight = settings.theme === "starlight" || settings.theme === "dark" || (settings.theme === "system" && typeof window !== "undefined" && matchMedia("(prefers-color-scheme: dark)").matches);
 
   return (
     <div className="page today">
@@ -83,8 +85,15 @@ export function Today() {
         <h1 className="display">{greeting(now.getHours())}, felfedező.</h1>
       </header>
 
+      <ExamBanner />
+
       <section className={`journey ${total === 0 && !active ? "is-clear" : ""}`}>
-        <img className="journey-art" src={`${BRAND}/hero.webp`} alt="" fetchPriority="high" />
+        <img
+          className={`journey-art ${isNight ? "journey-night" : ""}`}
+          src={`${BRAND}/${isNight ? "starlight-hero.webp" : "hero.webp"}`}
+          alt=""
+          fetchPriority="high"
+        />
         <div className="journey-body">
           {active ? (
             <>

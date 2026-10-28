@@ -19,7 +19,7 @@ import { AmbienceController, AmbiencePicker } from "./ui/Ambience";
 import { Logo } from "./ui/Logo";
 import { Palette } from "./ui/Palette";
 import { Sheet } from "./ui/Sheet";
-import { shouldShowSplash, Splash } from "./ui/Splash";
+import { Starfield } from "./ui/Starfield";
 import { Toasts } from "./ui/Toast";
 
 const NAV: { page: Route["page"]; label: string; icon: typeof Compass }[] = [
@@ -33,10 +33,17 @@ function useTheme() {
   const theme = useStore((s) => s.settings.theme);
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === "system") root.removeAttribute("data-theme");
-    else root.setAttribute("data-theme", theme);
-    const dark = theme === "dark" || (theme === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#0D1120" : "#F6F1E7");
+    const isStarlight = theme === "starlight";
+    if (isStarlight) {
+      root.setAttribute("data-skin", "starlight");
+      root.setAttribute("data-theme", "dark");
+    } else {
+      root.removeAttribute("data-skin");
+      if (theme === "system") root.removeAttribute("data-theme");
+      else root.setAttribute("data-theme", theme);
+    }
+    const dark = isStarlight || theme === "dark" || (theme === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", isStarlight ? "#070A16" : dark ? "#0D1120" : "#F6F1E7");
   }, [theme]);
   return theme;
 }
@@ -85,7 +92,6 @@ function Shell() {
   const onboarded = useStore((s) => s.settings.onboarded);
   const theme = useStore((s) => s.settings.theme);
   const [palette, setPalette] = useState(false);
-  const [splash, setSplash] = useState(shouldShowSplash);
   const focus = route.page === "learn";
 
   useEffect(() => {
@@ -108,10 +114,11 @@ function Shell() {
     if (!word) window.scrollTo({ top: 0 });
   }, [route.page]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const dark = theme === "dark" || (theme === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+  const dark = theme === "starlight" || theme === "dark" || (theme === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
 
   return (
     <div className={`app ${focus ? "is-focus" : ""}`}>
+      {theme === "starlight" && <Starfield />}
       {!focus && (
         <header className="topbar">
           <a className="topbar-logo" href="#/" aria-label="Szó Atlasz – főoldal">
@@ -128,10 +135,9 @@ function Shell() {
             <button className="search-pill" onClick={() => setPalette(true)} aria-label="Szó keresése">
               <Search size={17} />
               <span>Keresés</span>
-              <kbd>⌘K</kbd>
             </button>
             <AmbiencePicker />
-            <button className="icon-btn" onClick={() => store.settings({ theme: dark ? "light" : "dark" })} aria-label={dark ? "Világos téma" : "Sötét téma"}>
+            <button className="icon-btn" onClick={() => store.settings({ theme: dark ? "light" : "starlight" })} aria-label={dark ? "Világos téma" : "Csillagfény téma"}>
               {dark ? <Sun size={19} /> : <Moon size={19} />}
             </button>
             <a className="icon-btn hide-sm" href="#/about" aria-label="Névjegy és nyílt forrás" title="Névjegy és nyílt forrás">
@@ -176,8 +182,7 @@ function Shell() {
 
       <WordSheet id={word} />
       <Palette open={palette} onClose={() => setPalette(false)} />
-      {!onboarded && route.page !== "about" && !splash && <Onboarding />}
-      {splash && <Splash onDone={() => setSplash(false)} />}
+      {!onboarded && route.page !== "about" && <Onboarding />}
       <Toasts />
       <AmbienceController />
     </div>

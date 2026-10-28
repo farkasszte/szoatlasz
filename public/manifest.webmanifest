@@ -1,1 +1,31 @@
-{"name":"Szó Atlasz – magyar–angol szótanuló","short_name":"Szó Atlasz","description":"Egy szó, egy kép. Illusztrált angol szókincs magyarul tanulóknak.","start_url":"./","display":"standalone","background_color":"#F3ECDF","theme_color":"#F3ECDF","icons":[{"src":"favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"},{"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}
+{
+  "name": "Szó Atlasz – magyar–angol szótanuló",
+  "short_name": "Szó Atlasz",
+  "description": "Egy szó, egy kép. Illusztrált angol szókincs magyarul tanulóknak.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#090C18",
+  "theme_color": "#090C18",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "books"],
+  "orientation": "portrait-primary"
+}

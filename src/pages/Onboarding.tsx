@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { useAtlas } from "../atlas/context";
 import { store } from "../store/store";
 
@@ -21,12 +22,12 @@ export function Onboarding() {
   const [level, setLevel] = useState(() => Math.min(1, Math.max(0, levels.length - 1)));
   const [goal, setGoal] = useState(10);
   const finish = () => store.settings({ onboarded: true, startLevel: level, dailyNew: goal });
-  return (
+  const content = (
     <div className="onboard" role="dialog" aria-modal="true" aria-label="Üdvözlés">
       <div className="onboard-card">
         <img className="onboard-art" src={`${import.meta.env.BASE_URL}brand/hero.webp`} alt="" />
         <div className="onboard-body">
-          <p className="eyebrow">Üdv a Szó Atlaszben</p>
+          <p className="eyebrow">Üdv a Szó Atlaszban</p>
           <h1 className="display">
             {atlas.count.toLocaleString()} csillag
             <br />
@@ -62,4 +63,5 @@ export function Onboarding() {
       </div>
     </div>
   );
+  return typeof document !== "undefined" ? createPortal(content, document.body) : content;
 }

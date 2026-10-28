@@ -51,7 +51,7 @@ export interface Settings {
   autoplay: boolean;
   dailyNew: number;
   retention: number;
-  theme: "system" | "light" | "dark";
+  theme: "system" | "light" | "dark" | "starlight";
   sfx: boolean;
   spell: boolean;
   startLevel: number;
@@ -59,6 +59,9 @@ export interface Settings {
   ambience: "off" | "stars" | "rain" | "sea" | "forest" | "fire" | "voyage" | "cafe";
   ambienceVolume: number;
   splash: boolean;
+  examDate: string;
+  targetBand: number;
+  planAuto: boolean;
 }
 
 export const defaultSettings: Settings = {
@@ -66,14 +69,17 @@ export const defaultSettings: Settings = {
   autoplay: true,
   dailyNew: 10,
   retention: 0.9,
-  theme: "dark",
+  theme: "starlight",
   sfx: true,
   spell: true,
   startLevel: 0,
   onboarded: false,
   ambience: "stars",
   ambienceVolume: 0.45,
-  splash: true,
+  splash: false,
+  examDate: "",
+  targetBand: 7.0,
+  planAuto: true,
 };
 
 export const emptyProgress = (datasetId: string): Progress => ({
@@ -162,7 +168,7 @@ export function sanitizeSettings(v: unknown): Settings {
   if (typeof v.autoplay === "boolean") s.autoplay = v.autoplay;
   if (num(v.dailyNew, 0, 100)) s.dailyNew = Math.round(v.dailyNew as number);
   if (num(v.retention, 0.7, 0.97)) s.retention = v.retention as number;
-  if (v.theme === "system" || v.theme === "light" || v.theme === "dark") s.theme = v.theme;
+  if (v.theme === "system" || v.theme === "light" || v.theme === "dark" || v.theme === "starlight") s.theme = v.theme;
   if (typeof v.sfx === "boolean") s.sfx = v.sfx;
   if (typeof v.spell === "boolean") s.spell = v.spell;
   if (num(v.startLevel, 0, 5)) s.startLevel = Math.round(v.startLevel as number);
@@ -170,6 +176,9 @@ export function sanitizeSettings(v: unknown): Settings {
   if (["off", "stars", "rain", "sea", "forest", "fire", "voyage", "cafe"].includes(v.ambience as string)) s.ambience = v.ambience as Settings["ambience"];
   if (num(v.ambienceVolume, 0, 1)) s.ambienceVolume = v.ambienceVolume as number;
   if (typeof v.splash === "boolean") s.splash = v.splash;
+  if (typeof v.examDate === "string") s.examDate = v.examDate.slice(0, 20);
+  if (num(v.targetBand, 5.0, 9.0)) s.targetBand = Math.round((v.targetBand as number) * 2) / 2;
+  if (typeof v.planAuto === "boolean") s.planAuto = v.planAuto;
   return s;
 }
 

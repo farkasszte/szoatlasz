@@ -62,8 +62,7 @@ export function About() {
           <dl className="keys">
             <div>
               <dt>
-                <kbd>⌘</kbd>
-                <kbd>K</kbd> vagy <kbd>/</kbd>
+                <kbd>Ctrl</kbd> / <kbd>⌘</kbd> + <kbd>K</kbd> vagy <kbd>/</kbd>
               </dt>
               <dd>Bármely szó keresése</dd>
             </div>

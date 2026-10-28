@@ -1,8 +1,9 @@
 import { Download, RotateCcw, Upload } from "lucide-react";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useAtlas } from "../atlas/context";
 import { isMastered } from "../store/srs";
 import { dayKey, exportBackup, importBackup, resetProgress, store, useStore, type Settings } from "../store/store";
+import { ExamSheet } from "../ui/Exam";
 import { toast } from "../ui/Toast";
 import { streakOf } from "./Today";
 
@@ -12,6 +13,7 @@ export function Me() {
   const settings = useStore((s) => s.settings);
   const saveError = useStore((s) => s.saveError);
   const file = useRef<HTMLInputElement>(null);
+  const [examOpen, setExamOpen] = useState(false);
 
   const stats = useMemo(() => {
     const cards = Object.values(progress.cards);
@@ -118,6 +120,18 @@ export function Me() {
               ))}
             </div>
           </Field>
+          <Field
+            label="Vizsgaterv"
+            hint={
+              settings.examDate
+                ? `${settings.examDate} · Band ${settings.targetBand.toFixed(1)}${settings.planAuto ? " (automatikus ütemezés)" : ""}`
+                : "Tűzz ki egy vizsgaidőpontot a célzott tanuláshoz."
+            }
+          >
+            <button type="button" className="btn btn-ghost" onClick={() => setExamOpen(true)}>
+              {settings.examDate ? "Vizsgaterv módosítása" : "Vizsgaterv kitűzése"}
+            </button>
+          </Field>
           <Field label="Kezdő szint" hint="A már ismert, alacsonyabb szintek kihagyása.">
             <div className="segmented">
               {atlas.cefr.map((l, i) => (
@@ -150,9 +164,10 @@ export function Me() {
             <div className="segmented">
               {(
                 [
-                  ["system", "Rendszer"],
-                  ["light", "Világos"],
+                  ["starlight", "Csillagfény"],
                   ["dark", "Sötét"],
+                  ["light", "Világos"],
+                  ["system", "Rendszer"],
                 ] as const
               ).map(([k, l]) => (
                 <button key={k} className={settings.theme === k ? "is-on" : ""} onClick={() => set({ theme: k })}>
@@ -163,7 +178,6 @@ export function Me() {
           </Field>
           <Toggle label="Automatikus kiejtés" on={settings.autoplay} set={(v) => set({ autoplay: v })} />
           <Toggle label="Felületi hangok" on={settings.sfx} set={(v) => set({ sfx: v })} />
-          <Toggle label="Nyitóanimáció (naponta egyszer)" on={settings.splash} set={(v) => set({ splash: v })} />
           <Toggle label="Helyesírás az ismétlésben" on={settings.spell} set={(v) => set({ spell: v })} />
         </section>
 
@@ -192,6 +206,7 @@ export function Me() {
             </button>
           </div>
         </section>
+        <ExamSheet open={examOpen} onClose={() => setExamOpen(false)} />
       </div>
     </div>
   );

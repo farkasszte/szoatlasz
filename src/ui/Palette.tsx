@@ -1,5 +1,6 @@
 import { CornerDownLeft, Search } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { Atlas, WordRef } from "../atlas/types";
 import { useAtlas } from "../atlas/context";
 import { openWord } from "../lib/router";
@@ -51,7 +52,7 @@ export function Palette({ open, onClose }: { open: boolean; onClose: () => void 
     onClose();
     openWord(w.id);
   };
-  return (
+  const content = (
     <div className="palette-root" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
       <div className="palette" role="dialog" aria-modal="true" aria-label="Szó keresése">
         <label className="palette-input">
@@ -110,4 +111,5 @@ export function Palette({ open, onClose }: { open: boolean; onClose: () => void 
       </div>
     </div>
   );
+  return typeof document !== "undefined" ? createPortal(content, document.body) : content;
 }

@@ -1,6 +1,7 @@
 import type { Atlas, WordRef } from "../atlas/types";
 import { MEDIA } from "../atlas/types";
 import { hashSeed, normalize, shuffle } from "../lib/text";
+import { calculateExamPlan } from "./exam";
 import { isMastered, review, Rating, type Grade } from "./srs";
 import { bumpDay, dayKey, store, type ActiveSession, type Progress, type QuizKind, type Settings, type Step } from "./store";
 
@@ -32,7 +33,14 @@ export function nextNew(atlas: Atlas, p: Progress, settings: Settings, count: nu
 
 export function todayPlan(atlas: Atlas, p: Progress, s: Settings) {
   const due = dueIds(p).filter((id) => atlas.byId.has(id));
-  const newLeft = Math.max(0, s.dailyNew - newToday(p));
+  let dailyGoal = s.dailyNew;
+  if (s.planAuto && s.examDate) {
+    const examPlan = calculateExamPlan({ words: atlas.words, cards: p.cards, days: p.days, settings: s });
+    if (examPlan.status !== "none" && examPlan.status !== "passed") {
+      dailyGoal = examPlan.daily;
+    }
+  }
+  const newLeft = Math.max(0, dailyGoal - newToday(p));
   const fresh = nextNew(atlas, p, s, newLeft);
   return { due, fresh, minutes: Math.max(1, Math.round(due.length * 0.25 + fresh.length * 0.9)) };
 }
