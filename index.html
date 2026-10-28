@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="hu">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0D1120" />
+    <title>Szó Atlasz – magyar–angol szótanuló</title>
+    <meta name="description" content="7 298 illusztrált angol szócikk magyar jelentéssel, példamondattal és kiejtéssel. Tanulj képekből, ismételj okosan, gyűjts csillagokat." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Szó Atlasz – egy szó, egy kép" />
+    <meta property="og:description" content="Illusztrált angol szókincs magyarul tanulóknak: napi terv, kiejtés, ismétlés és gépelő stúdió." />
+    <meta property="og:image" content="%BASE_URL%brand/og-card.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Szó Atlasz – egy szó, egy kép" />
+    <meta name="twitter:image" content="%BASE_URL%brand/og-card.jpg" />
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
+    <link rel="apple-touch-icon" href="%BASE_URL%icon-512.png" />
+    <link rel="manifest" href="%BASE_URL%manifest.webmanifest" />
+    <link rel="preload" href="%BASE_URL%atlas/index.json" as="fetch" crossorigin="anonymous" />
+    <script>
+      // A mentett téma már az első festés előtt érvényesül (alapból sötét).
+      (function () {
+        var t = "dark";
+        try {
+          var s = JSON.parse(localStorage.getItem("szoatlasz:settings") || "{}");
+          if (s.theme) t = s.theme;
+        } catch (e) {}
+        if (t !== "system") document.documentElement.setAttribute("data-theme", t);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,50 @@
+# Függőségek és buildek
+node_modules/
+dist/
+.local/
+output/
+*.zip
+*.tsbuildinfo
+.vite/
+
+# Környezeti változók és titkok (soha ne kerüljenek Gitbe!)
+.env
+.env.*
+!.env.example
+
+# Vercel CLI
+.vercel
+
+# Cloudflare R2 külső tárolóba kiszervezett média (képek és hangok)
+public/atlas/img/
+public/atlas/thumb/
+public/atlas/audio/
+
+# Logok
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Teszt és riport kimenetek
+.playwright-cli/
+test-results/
+playwright-report/
+blob-report/
+
+# Python cache (upload_media.py futtatása esetén)
+__pycache__/
+*.py[cod]
+
+# Editorok és IDE-k
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Operációs rendszer fájlok
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
