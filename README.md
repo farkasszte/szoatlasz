@@ -39,13 +39,6 @@ bun test
 - `scripts/build-dataset.mjs` – a fenti forrásokból építi a `public/atlas/index.json` és `entries/*.json` fájlokat.
 - `scripts/translate-senses.mjs`, `scripts/translate-senses-extra.mjs`, `scripts/translate-extras.mjs`, `scripts/translate-examples.mjs` – újraindítható fordító pipeline (DeepSeek).
 
-```bash
-DEEPSEEK_API_KEY=... bun scripts/translate-senses.mjs --concurrency 4
-DEEPSEEK_API_KEY=... bun scripts/translate-extras.mjs --concurrency 4
-DEEPSEEK_API_KEY=... bun scripts/translate-examples.mjs --concurrency 4
-bun run dataset
-```
-
 A magyar jelentések, tippek és példamondatok gépi fordítással készültek, és még nem estek át teljes szakmai lektoráláson.
 A 986 leggyakoribb iskolai szó jelentése a Kincsesláda saját szókészletéből származik.
 
@@ -58,68 +51,10 @@ src/
   store/        FSRS ütemező, menetépítés, localStorage-tár
   galaxy/       WebGL csillagtérkép
   styles/       a teljes vizuális rendszer
-public/atlas/   index, szócikk-darabok, illusztrációk, hangok
+public/atlas/   index, szócikk-darabok
 data/           forrásadatok és magyar fordítások
 scripts/        szótárépítő és fordító pipeline
 ```
-
-## Vercel + Cloudflare R2
-
-A kép- és hanganyag (≈700 MB, 30 000 fájl) nem a repóban, hanem Cloudflare R2-n él; a Vercel
-csak a kódot, az indexet és a szócikk-darabokat szolgálja ki. A build ezt automatikusan kezeli:
-ha a `VITE_MEDIA_BASE` be van állítva, a `dist/atlas/img|thumb|audio` mappák kimaradnak a buildből.
-
-### 1. Média feltöltése
-
-AWS CLI-vel (ha telepítve van):
-
-```bash
-aws s3 sync public/atlas/ s3://szoatlasz-media/atlas/ \
-  --endpoint-url https://<ACCOUNT_ID>.r2.cloudflarestorage.com \
-  --exclude "*" --include "img/*" --include "thumb/*" --include "audio/*"
-```
-
-Vagy a mellékelt, újraindítható feltöltővel (boto3, a meglévő fájlokat kihagyja):
-
-```bash
-export R2_ENDPOINT="https://<ACCOUNT_ID>.r2.cloudflarestorage.com"
-export R2_BUCKET="szoatlasz-media"
-export AWS_ACCESS_KEY_ID="..."
-export AWS_SECRET_ACCESS_KEY="..."
-python scripts/upload_media.py --dry-run
-python scripts/upload_media.py
-```
-
-A script a projekt gyökerében lévő `.env.r2` fájlt is beolvassa (a `.gitignore` kizárja), így nem kell
-környezeti változókat exportálni.
-
-### 2. Média kivétele a Gitből
-
-A feltöltés **után** (a fájlok a lemezen megmaradnak):
-
-```bash
-git rm -r --cached public/atlas/img public/atlas/thumb public/atlas/audio
-git status
-```
-
-A `.gitignore` már kizárja ezeket a mappákat, így nem kerülnek vissza a következő commitba.
-
-### 3. Vercel
-
-Add New → Project → Import Git Repository; Framework: Vite, Build: `bun run build`,
-Output: `dist`. Environment Variables:
-
-```
-VITE_MEDIA_BASE = https://pub-<hash>.r2.dev
-```
-
-Az érték a bucket **gyökere** (a kód maga fűzi hozzá az `/atlas/...` útvonalat), záró perjel nélkül.
-Helyi fejlesztésnél a média a `public/atlas` alól megy; ha a mappák hiányoznak, állítsd be
-ugyanezt a változót a `.env.local`-ban egy elérhető CDN-re.
-
-> [!NOTE]
-> Az R2 bucket legyen nyilvános (`r2.dev` vagy egyedi domain), különben a böngésző 403-at kap.
-> A `scripts/upload_media.py` `Cache-Control: immutable` fejlécet állít a képekre és hangokra.
 
 ## Licenc és forrásmegjelölés
 
@@ -136,3 +71,4 @@ Részletek: [`ATTRIBUTION.md`](ATTRIBUTION.md).
 - A magyar jelentések/tippek gépi fordításúak, lektorálás előtt állnak.
 - A kiejtés a bőngésző hangkészletétől is függ; a szóhangok a repóban vannak.
 - A szótár nem hivatalos vizsgaszólista, és nem ígér pontszámemelést.
+- A média tartlmak az eredeti projectben elérhetők, ez a változat GIT-ben nem tárolja.
