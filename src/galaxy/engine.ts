@@ -143,9 +143,13 @@ function shader(gl: WebGL2RenderingContext, type: number, src: string) {
 }
 function program(gl: WebGL2RenderingContext, vs: string, fs: string) {
   const p = gl.createProgram()!;
-  gl.attachShader(p, shader(gl, gl.VERTEX_SHADER, vs));
-  gl.attachShader(p, shader(gl, gl.FRAGMENT_SHADER, fs));
+  const v = shader(gl, gl.VERTEX_SHADER, vs);
+  const f = shader(gl, gl.FRAGMENT_SHADER, fs);
+  gl.attachShader(p, v);
+  gl.attachShader(p, f);
   gl.linkProgram(p);
+  gl.deleteShader(v);
+  gl.deleteShader(f);
   if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p) || "link");
   return p;
 }
@@ -174,6 +178,7 @@ export class GalaxyEngine {
   private neb?: WebGLProgram;
   private vao?: WebGLVertexArrayObject;
   private stateBuf?: WebGLBuffer;
+  private buffers: WebGLBuffer[] = [];
   private states: Float32Array;
   private vp = new Float32Array(16);
   private screen: Float32Array;
@@ -222,6 +227,7 @@ export class GalaxyEngine {
     gl.bindVertexArray(this.vao);
     const attr = (name: string, data: Float32Array, size: number, usage: number = gl.STATIC_DRAW) => {
       const buf = gl.createBuffer()!;
+      this.buffers.push(buf);
       gl.bindBuffer(gl.ARRAY_BUFFER, buf);
       gl.bufferData(gl.ARRAY_BUFFER, data, usage);
       const loc = gl.getAttribLocation(this.star!, name);
@@ -318,10 +324,24 @@ export class GalaxyEngine {
     cancelAnimationFrame(this.raf);
   }
 
-  /** Stop drawing. The context stays alive: the same canvas may be mounted again (React StrictMode). */
+  /** Stop drawing and release all WebGL resources. */
   destroy() {
     this.stop();
     this.onFrame = undefined;
+    const gl = this.gl;
+    if (gl) {
+      if (this.vao) gl.deleteVertexArray(this.vao);
+      for (const b of this.buffers) gl.deleteBuffer(b);
+      this.buffers = [];
+      if (this.star) gl.deleteProgram(this.star);
+      if (this.neb) gl.deleteProgram(this.neb);
+      this.star = undefined;
+      this.neb = undefined;
+      this.vao = undefined;
+      this.stateBuf = undefined;
+      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      this.gl = null;
+    }
   }
 
   private matrices() {

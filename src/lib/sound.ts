@@ -113,12 +113,15 @@ function fadeTo(g: GainNode, v: number, seconds: number) {
   g.gain.linearRampToValueAtTime(v, c.currentTime + seconds);
 }
 
+let currentAmbienceToken = 0;
+
 export async function setAmbience(id: AmbienceId | null, volume = ambVolume) {
   ambVolume = volume;
   if (amb && amb.id === id) {
     fadeTo(amb.gain, level(), 0.4);
     return;
   }
+  const token = ++currentAmbienceToken;
   const old = amb;
   amb = null;
   if (old) {
@@ -129,7 +132,7 @@ export async function setAmbience(id: AmbienceId | null, volume = ambVolume) {
   const c = audio();
   if (!c || !master) return;
   const buf = await load(`amb-${id}.mp3`);
-  if (!buf || amb) return;
+  if (token !== currentAmbienceToken || !buf || amb) return;
   const src = c.createBufferSource();
   src.buffer = buf;
   src.loop = true;

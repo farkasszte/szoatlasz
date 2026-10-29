@@ -4523,7 +4523,7 @@ a:hover .mark-needle,
 
 .exam-invite-go {
   flex: none;
-  transition: transform var(--motion-feedback) var(--ease);
+  transition: transform 0.2s var(--ease);
 }
 
 .exam-invite:hover {

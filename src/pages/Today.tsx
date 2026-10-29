@@ -284,7 +284,6 @@ function ReadingOfDay() {
 }
 
 function GalaxyPanel({ learned, total }: { learned: number; total: number }) {
-  const today = useStore((s) => s.progress.days[dayKey()]);
   const ids = useStore((s) => s.progress.cards);
   const todayIds = useMemo(() => {
     const start = new Date();
@@ -293,7 +292,6 @@ function GalaxyPanel({ learned, total }: { learned: number; total: number }) {
       .filter(([, c]) => c.seen >= start.getTime())
       .map(([id]) => id);
   }, [ids]);
-  void today;
   return (
     <section className="galaxy-panel" onClick={() => go({ page: "atlas", view: "galaxy" })} role="link" tabIndex={0} onKeyDown={(e) => e.key === "Enter" && go({ page: "atlas", view: "galaxy" })}>
       <Galaxy mode="mini" highlight={todayIds} />

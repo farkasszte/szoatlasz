@@ -32,6 +32,7 @@ async function speak(url: string | null | undefined, text: string, accent: "uk" 
       await new Promise<void>((r) => {
         a.onended = () => r();
         a.onpause = () => r();
+        a.onerror = () => r();
       });
       return "recorded" as const;
     } catch {

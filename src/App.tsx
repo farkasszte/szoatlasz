@@ -211,7 +211,8 @@ function WordSheet({ id }: { id: string | null }) {
   useEffect(() => {
     if (!id) return;
     const on = (e: KeyboardEvent) => {
-      if ((e.target as HTMLElement).tagName === "INPUT") return;
+      const tag = (e.target as HTMLElement).tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || (e.target as HTMLElement).isContentEditable) return;
       if (e.key === "ArrowLeft") neighbor(-1);
       if (e.key === "ArrowRight") neighbor(1);
     };

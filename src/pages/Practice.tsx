@@ -203,7 +203,7 @@ function TypingRound({ mode, entries, onExit, onAgain }: { mode: Mode; entries: 
       <section className="typing-stage" onClick={() => input.current?.focus()}>
         {mode === "word" && (
           <div className="typing-cue">
-            <Illustration src={atlas.img(e)} word={e.w} topic={0} eager />
+            <Illustration src={atlas.img(e)} word={e.w} topic={atlas.byId.get(e.id)?.topic ?? 0} eager />
             <p>
               <span className="pos">{e.senses[0].pos}</span> {e.senses[0].hu}
             </p>

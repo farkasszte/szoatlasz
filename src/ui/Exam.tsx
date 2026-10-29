@@ -1,5 +1,5 @@
 import { ArrowRight, Calendar, Edit2, Minus, Plus, Sparkles } from "lucide-react";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { useAtlas } from "../atlas/context";
 import { calculateExamPlan, CEFR_NAMES, formatIsoDate, parseIsoDate } from "../store/exam";
 import { store, useStore } from "../store/store";
@@ -146,6 +146,16 @@ export function ExamSheet({ open, onClose }: { open: boolean; onClose: () => voi
     targetBand: settings.targetBand || 7.0,
     planAuto: settings.examDate ? settings.planAuto : true,
   }));
+
+  useEffect(() => {
+    if (open) {
+      setDraft({
+        examDate: settings.examDate || "",
+        targetBand: settings.targetBand || 7.0,
+        planAuto: settings.examDate ? settings.planAuto : true,
+      });
+    }
+  }, [open, settings.examDate, settings.targetBand, settings.planAuto]);
 
   const save = () => {
     store.settings(draft);

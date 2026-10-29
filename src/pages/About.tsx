@@ -11,7 +11,7 @@ export function About() {
       <header className="about-hero">
         <img src={`${BASE}brand/og.webp`} alt="" />
         <div>
-          <p className="eyebrow">A Szó Atlaszről</p>
+          <p className="eyebrow">A Szó Atlaszról</p>
           <h1 className="display">Egy szó, egy kép.</h1>
           <p className="lede">
             A Szó Atlasz {atlas.count.toLocaleString()} angol szócikket kínál magyar nyelvtanulóknak. Minden szóhoz tartozik

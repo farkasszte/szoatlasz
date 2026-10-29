@@ -199,7 +199,7 @@ function Quiz({ step, session }: { step: Step & { kind: QuizKind }; session: Act
               {sentence ? (
                 <>
                   {sentence.before}
-                  <span className="blank">{pending ? sentence.hidden : "　　　"}</span>
+                  <span className="blank">{pending ? sentence.hidden : "\u00A0"}</span>
                   {sentence.after}
                 </>
               ) : (
@@ -265,7 +265,7 @@ function SpellPrompt({ entry, refw, hints }: { entry: Entry; refw: WordRef; hint
         {sentence && (
           <p className="cloze cloze-sm" lang="en">
             {sentence.before}
-            <span className="blank">　　　</span>
+            <span className="blank">{"\u00A0"}</span>
             {sentence.after}
           </p>
         )}
@@ -350,7 +350,7 @@ function Feedback({ entry, refw, correct, onNext }: { entry: Entry; refw: WordRe
             {entry.senses
               .slice(0, 2)
               .map((s) => `${s.pos} ${s.hu}`)
-              .join("　")}
+              .join(" · ")}
           </p>
           {entry.ex[0] && (
             <p className="feedback-ex" lang="en">

@@ -53,9 +53,14 @@ function ReadingError({ message }: { message: string }) {
       <p className="eyebrow">Olvasósarok</p>
       <h1 className="display">Nem sikerült betölteni.</h1>
       <p className="muted">{message}</p>
-      <button className="btn btn-primary" onClick={() => location.reload()}>
-        Újratöltés
-      </button>
+      <div style={{ display: "flex", gap: "12px", marginTop: "16px", flexWrap: "wrap" }}>
+        <button className="btn btn-primary" onClick={() => location.reload()}>
+          Újratöltés
+        </button>
+        <a className="btn btn-ghost" href="#/reading">
+          Vissza a katalógushoz
+        </a>
+      </div>
     </div>
   );
 }
@@ -213,6 +218,8 @@ function Reader({ id, items }: { id: string; items: ReadingMeta[] }) {
     };
   }, [id]);
 
+  const parsedParas = useMemo(() => (doc ? doc.paras.map(parseReadingMarkup) : []), [doc]);
+
   const order = items.findIndex((i) => i.id === id);
   const prev = order > 0 ? items[order - 1] : null;
   const next = order >= 0 && order < items.length - 1 ? items[order + 1] : null;
@@ -266,10 +273,10 @@ function Reader({ id, items }: { id: string; items: ReadingMeta[] }) {
 
       <div className="reading-layout">
         <article className="reading-article">
-          {doc.paras.map((para, i) => (
+          {doc.paras.map((_, i) => (
             <section className="reading-para" key={i}>
               <p lang="en">
-                {parseReadingMarkup(para).map((part, k) =>
+                {parsedParas[i].map((part, k) =>
                   part.wordId ? (
                     <button key={k} type="button" className="reading-word" onClick={() => openWord(part.wordId!)} title={`${part.text} – szócikk`}>
                       {part.text}

@@ -1,5 +1,5 @@
 /* Szó Atlasz offline gyorsítótár: az alkalmazásváz hálózat-először, minden más gyorsítótár-először. */
-const VERSION = "szoatlasz-v5";
+const VERSION = "szoatlasz-v6";
 const SHELL = `${VERSION}-shell`;
 const MEDIA = `${VERSION}-media`;
 const READING = `${VERSION}-readings`;
@@ -39,7 +39,15 @@ self.addEventListener("fetch", (event) => {
           if (res.ok) caches.open(SHELL).then((c) => c.put(req, res.clone()));
           return res;
         })
-        .catch(() => caches.match(req).then((hit) => hit || caches.match(new URL("./", self.registration.scope).href))),
+        .catch(() =>
+          caches.match(req).then((hit) => {
+            if (hit) return hit;
+            if (req.mode === "navigate") {
+              return caches.match(new URL("./", self.registration.scope).href);
+            }
+            return new Response("Not found", { status: 404, statusText: "Offline resource not cached" });
+          }),
+        ),
     );
     return;
   }
